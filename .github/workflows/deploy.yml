@@ -19,7 +19,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            cd /opt/Millan
+            cd /srv/proyectos/deploy_test
             git pull origin main
             docker compose down
             docker compose up -d --build
