@@ -1,0 +1,15 @@
+services:
+  deploy_test_backend:
+    container_name: deploy_test_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "8080"
+    networks:
+      - red_global
+
+networks:
+  red_global:
+    external: true
