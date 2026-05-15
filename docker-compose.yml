@@ -10,8 +10,13 @@ services:
 
     restart: unless-stopped
 
-    ports:
-      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql_global:3306/deploy_test
+      DB_USER: deploy_test
+      DB_PASSWORD: 123456
+
+    expose:
+      - "8080"
 
     networks:
       - red_global
