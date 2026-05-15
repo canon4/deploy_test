@@ -12,11 +12,3 @@ services:
 
     ports:
       - "8080:8080"
-
-    networks:
-      - red_global
-
-networks:
-
-  red_global:
-    external: true

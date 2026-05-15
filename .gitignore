@@ -17,3 +17,7 @@ Thumbs.db
 
 # Docker
 mysql/
+
+#GitHub
+.github/
+docker-compose-local.yml
