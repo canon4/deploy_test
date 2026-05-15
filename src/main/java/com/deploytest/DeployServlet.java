@@ -69,7 +69,7 @@ public class DeployServlet extends HttpServlet {
         }
 
         String dbStatusIcon = dbConnected ? "✅" : "❌";
-        String dbStatusText = dbConnected ? "Conectado" : "Sin conexión";
+        String dbStatusText = dbConnected ? "Conectado Con Actions v1 " : "Sin conexión";
         String dbStatusColor = dbConnected
                 ? "linear-gradient(90deg, #00f260, #0575e6)"
                 : "linear-gradient(90deg, #ff416c, #ff4b2b)";
