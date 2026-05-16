@@ -9,13 +9,11 @@ jobs:
 
   deploy:
 
-    name: Deploy Application
-
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Deploy via SSH
+      - name: Deploy Application
 
         uses: appleboy/ssh-action@v1.0.3
 
@@ -39,15 +37,33 @@ jobs:
 
             echo "Verificando proyecto..."
 
+            mkdir -p $PROJECT_DIR
+
+            # Si no existe .git
             if [ ! -d "$PROJECT_DIR/.git" ]; then
 
-              echo "Proyecto no existe. Clonando repositorio..."
+              echo "Repositorio no inicializado"
 
-              git clone $REPO_URL .
+              # Verificar si carpeta esta vacia
+              if [ -z "$(ls -A $PROJECT_DIR)" ]; then
+
+                echo "Directorio vacio. Clonando..."
+
+                git clone $REPO_URL $PROJECT_DIR
+
+              else
+
+                echo "ERROR: Directorio no esta vacio"
+
+                ls -la $PROJECT_DIR
+
+                exit 1
+
+              fi
 
             else
 
-              echo "Proyecto existente. Actualizando..."
+              echo "Repositorio existente"
 
               cd $PROJECT_DIR
 
@@ -56,6 +72,8 @@ jobs:
               git pull origin main
 
             fi
+
+            cd $PROJECT_DIR
 
             echo "Construyendo contenedores..."
 
