@@ -6,21 +6,63 @@ on:
       - main
 
 jobs:
+
   deploy:
-    name: Deploy via SSH
+
+    name: Deploy Application
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
-          script: |
-            cd /srv/proyectos/deploy_test
-            git pull origin main
-            docker compose down
-            docker compose up -d --build
 
+      - name: Deploy via SSH
+
+        uses: appleboy/ssh-action@v1.0.3
+
+        with:
+
+          host: ${{ secrets.VPS_HOST }}
+
+          username: ${{ secrets.VPS_USER }}
+
+          key: ${{ secrets.VPS_SSH_KEY }}
+
+          port: 22
+
+          script: |
+
+            PROJECT_NAME="deploy_test"
+
+            PROJECT_DIR="/srv/proyectos/$PROJECT_NAME"
+
+            REPO_URL="https://github.com/canon4/deploy_test.git"
+
+            echo "Verificando proyecto..."
+
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+
+              echo "Proyecto no existe. Clonando repositorio..."
+
+              git clone $REPO_URL .
+
+            else
+
+              echo "Proyecto existente. Actualizando..."
+
+              cd $PROJECT_DIR
+
+              git config --global --add safe.directory $PROJECT_DIR
+
+              git pull origin main
+
+            fi
+
+            echo "Construyendo contenedores..."
+
+            docker compose up -d --build --remove-orphans
+
+            echo "Limpiando imagenes antiguas..."
+
+            docker image prune -f
+
+            echo "Deploy finalizado correctamente"
