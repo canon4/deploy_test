@@ -13,7 +13,7 @@ services:
     environment:
       DB_URL: jdbc:mysql://mysql_global:3306/deploy_test
       DB_USER: deploy_user
-      DB_PASSWORD: "*****"
+      DB_PASSWORD: "123456"
     ports:
       - "8080:8080"
 
